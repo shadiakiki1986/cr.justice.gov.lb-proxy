@@ -12,75 +12,94 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
 
 <div class='container'>
-    <div class='row'>
-    <form method="GET" action="/" id='form_get'>
-      <label>
-      Register number:
-      <input type='text'
-             name='register_number'
-             placeholder="e.g. 66942"
-             {% if register_number %}
-             value="{{register_number}}"
-             {% endif %}
-             />
-      </label>
-
-      <label>
-      Register place:
-      <input type='text' 
-             name='register_place' 
-             placeholder="e.g. Mount Lebanon" 
-             {% if register_place %}
-             value="{{register_place}}"
-             {% endif %}
-             />
-      </label>
-        
-       <label>
-           Format:
-           <select name='format'>
-                <option value="html" selected="selected">html</option>
-                <option value="json">json</option>
-                <option value="xlsx">xlsx</option>
-            </select>
-       </label>
-
-      <input type="hidden" name="use_sample" value="" />
-        
-      <input type="submit" value="Submit" class='btn btn-primary' />
-    </form>
-    <p>
-      e.g.
-      <a href="#" name='example_register' data-number="66942" data-place="Mount Lebanon">66942 / Mount Lebanon</a>
-      &nbsp;|&nbsp;
-      <a href="#" name='example_register' data-number="66942" data-place="جبل لبنان"  e="">66942 / جبل لبنان</a>
-      &nbsp;|&nbsp;
-      <a href="#" id="use_sample">use sample</a>
-    </p>
+    
+    <h2></h2>
+    
+    <div class="jumbotron">
+      <h1 class="display-4">Proxy for <a href="http://cr.justice.gov.lb">cr.justice.gov.lb</a></h1>
+      <p class="lead">Enter single/multiple register number/place pairs in one shot.</p>
+      <hr class="my-4">
+      <p>Read results in this page or download xlsx file.</p>
     </div>
     
     <div class='row'>
-    <form method="POST" action="/" id='form_post' enctype='multipart/form-data'>
-      <label>
-      Upload xlsx file:
-      <input type='file'
-             name='uploaded_file'
-             />
-      </label>
-        
-       <label>
-           Format:
-           <select name='format'>
-                <option value="html" selected="selected">html</option>
-                <option value="json">json</option>
-                <option value="xlsx">xlsx</option>
-            </select>
-       </label>
+        <div class='col-md-9'>
+            <form method="GET" action="/" id='form_get'>
+              <label>
+              Register number:
+              <input type='text'
+                     name='register_number'
+                     placeholder="e.g. 66942"
+                     {% if register_number %}
+                     value="{{register_number}}"
+                     {% endif %}
+                     />
+              </label>
 
-      <input type="submit" value="Upload" class='btn btn-info' />
-    </form>
-    &nbsp;
-    Download <a href="/example_file">Example file</a>
+              <label>
+              Register place:
+              <input type='text' 
+                     name='register_place' 
+                     placeholder="e.g. Mount Lebanon" 
+                     {% if register_place %}
+                     value="{{register_place}}"
+                     {% endif %}
+                     />
+              </label>
+
+               <label>
+                   Format:
+                   <select name='format'>
+                        <option value="html" selected="selected">html</option>
+                        <option value="json">json</option>
+                        <option value="xlsx">xlsx</option>
+                    </select>
+               </label>
+
+              <input type="hidden" name="use_sample" value="" />
+
+              <input type="submit" value="Submit" class='btn btn-primary' />
+            </form>
+        </div>
+        <div class='col-md-3'>
+            <p>
+              e.g.
+              <a href="#" name='example_register' data-number="66942" data-place="Mount Lebanon">66942 / Mount Lebanon</a>
+              &nbsp;|&nbsp;
+              <a href="#" name='example_register' data-number="66942" data-place="جبل لبنان"  e="">66942 / جبل لبنان</a>
+              &nbsp;|&nbsp;
+              <a href="#" id="use_sample">use sample</a>
+            </p>
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div class='col-md-6'>
+            <form method="POST" action="/" id='form_post' enctype='multipart/form-data'>
+              <label>
+              Upload xlsx file:
+              <input type='file'
+                     name='uploaded_file'
+                     />
+              </label>
+
+               <label>
+                   Format:
+                   <select name='format'>
+                        <option value="html" selected="selected">html</option>
+                        <option value="json">json</option>
+                        <option value="xlsx">xlsx</option>
+                    </select>
+               </label>
+
+              <input type="submit" value="Upload" class='btn btn-info' />
+            </form>
+        </div>
+        <div class='col-md-3'>
+            <br/>
+            <br/>
+            Download <a href="/example_file">Example file</a>
+        </div>
     </div>
 
     <!-- http://flask.pocoo.org/docs/1.0/patterns/flashing/ -->
