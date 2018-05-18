@@ -1,6 +1,11 @@
 Flask app wrapping [scrapy-cr.justice.gov.lb](https://github.com/shadiakiki1986/scrapy-cr.justice.gov.lb) via [scrapyrt](http://scrapyrt.readthedocs.io/)
 
 
+## Usage
+
+Set `GOOGLE_APPLICATION_KEY` in `docker-compose.yml` to get arabic-english translation of names
+
+
 ## Dev notes
 
 ```

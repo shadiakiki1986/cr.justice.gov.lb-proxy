@@ -34,5 +34,8 @@ services:
     environment:
     - SCRAPYRT=http://scrapyrt:9080
     - FLASK_ENV=development # FIXME only during dev
+    - GOOGLE_APPLICATION_CREDENTIALS=/usr/share/gcp_key.json
     volumes:
     - ./build/web:/code # FIXME only during dev
+    - /home/ubuntu/bsec-configs/bsec-apps.net/bsec-compliance-kyc/gcp_key_f313ce9b2382.json:/usr/share/gcp_key.json:ro # FIXME be careful about this if publishing to docker hub
+

@@ -8,6 +8,8 @@ import pandas as pd
 import datetime as dt
 from flask_bootstrap import Bootstrap
 import time
+from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
+
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
 
@@ -80,6 +82,16 @@ def hello():
       return jsonify(response.json())
 
     df_out = pd.DataFrame(response.json()['items'])
+
+    # send to spider pipeline .. scrapyrt doesnt do this
+    pipeline = ScrapyCrJusticeGovLbPipeline()
+    pipeline.df = df_out.copy()
+    pipeline.close_spider(None)
+    df_out = pipeline.df
+
+    if df_out.shape[0]==0:
+      return render_template('app.html', df_html='No results found', register_number=register_number, register_place=register_place)
+
 
     # postprocess details_url
     df_out['details_url'] = df_out['details_url'].apply(

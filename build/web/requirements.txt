@@ -5,3 +5,8 @@ Flask-Bootstrap==3.3.7.1
 
 # https://pypi.org/project/requests-cache/#description
 requests_cache
+
+# Note that this is already a git submodule of cr.justice.gov.lb-proxy
+# and it gets mounted into the scrapyrt service tfrom there,
+# but here we need it too in order to process the list of item with the pipeline defined there
+git+https://github.com/shadiakiki1986/scrapy-cr.justice.gov.lb.git
