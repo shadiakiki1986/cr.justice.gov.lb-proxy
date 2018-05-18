@@ -10,3 +10,6 @@ requests_cache
 # and it gets mounted into the scrapyrt service tfrom there,
 # but here we need it too in order to process the list of item with the pipeline defined there
 git+https://github.com/shadiakiki1986/scrapy-cr.justice.gov.lb.git
+
+# for pandas.read_excel
+xlrd>=0.9.0

@@ -12,7 +12,8 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
 
 <div class='container'>
-    <form method="GET" action="/" id='main_form'>
+    <div class='row'>
+    <form method="GET" action="/" id='form_get'>
       <label>
       Register number:
       <input type='text'
@@ -48,9 +49,48 @@
         
       <input type="submit" value="Submit" class='btn btn-primary' />
     </form>
-    <p>e.g. <a href="#" name='example_register' data-number="66942" data-place="Mount Lebanon">66942 / Mount Lebanon</a></p>
-    <p>e.g. <a href="#" name='example_register' data-number="66942" data-place="جبل لبنان"  e="">66942 / جبل لبنان</a></p>
-    <p>or <a href="#" id="use_sample">use sample</a></p>
+    <p>
+      e.g.
+      <a href="#" name='example_register' data-number="66942" data-place="Mount Lebanon">66942 / Mount Lebanon</a>
+      &nbsp;|&nbsp;
+      <a href="#" name='example_register' data-number="66942" data-place="جبل لبنان"  e="">66942 / جبل لبنان</a>
+      &nbsp;|&nbsp;
+      <a href="#" id="use_sample">use sample</a>
+    </p>
+    </div>
+    
+    <div class='row'>
+    <form method="POST" action="/" id='form_post' enctype='multipart/form-data'>
+      <label>
+      Upload xlsx file:
+      <input type='file'
+             name='uploaded_file'
+             />
+      </label>
+        
+       <label>
+           Format:
+           <select name='format'>
+                <option value="html" selected="selected">html</option>
+                <option value="json">json</option>
+                <option value="xlsx">xlsx</option>
+            </select>
+       </label>
+
+      <input type="submit" value="Upload" class='btn btn-info' />
+    </form>
+    </div>
+
+    <!-- http://flask.pocoo.org/docs/1.0/patterns/flashing/ -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
     {% if df_html is not none %}
         {{df_html|safe}}
@@ -59,18 +99,18 @@
     <script>
       $(document).ready(function(){
         $('a[name="example_register"').click(function() {
-            $('#main_form input[name="register_number"]').val($(this).data('number'));
-            $('#main_form input[name="register_place"]').val($(this).data('place'));
-            $('#main_form select[name="format"]').val('html');
-            $('#main_form').submit();
+            $('#form_get input[name="register_number"]').val($(this).data('number'));
+            $('#form_get input[name="register_place"]').val($(this).data('place'));
+            $('#form_get select[name="format"]').val('html');
+            $('#form_get').submit();
         });
         $('a[id="use_sample"').click(function() {
-            $('#main_form input[name="use_sample"]').val('true');
-            $('#main_form').submit();
+            $('#form_get input[name="use_sample"]').val('true');
+            $('#form_get').submit();
         });
-        $('#main_form').on('submit', function(e) {
+        $('#form_get').on('submit', function(e) {
             //e.preventDefault();
-            $("#main_form :input[type='submit']").prop('disabled', true);
+            $("#form_get :input[type='submit']").prop('disabled', true);
         });
       });
     </script>

@@ -5,6 +5,11 @@ Flask app wrapping [scrapy-cr.justice.gov.lb](https://github.com/shadiakiki1986/
 
 Set `GOOGLE_APPLICATION_KEY` in `docker-compose.yml` to get arabic-english translation of names
 
+## Changelog
+
+0.1 (2018-05-17)
+- can either type in register number/place or upload xlsx file (examples in-page)
+
 
 ## Dev notes
 
