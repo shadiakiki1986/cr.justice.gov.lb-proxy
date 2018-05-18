@@ -1,0 +1,11 @@
+# with some inspiration from
+# https://hub.docker.com/r/scrapinghub/scrapyrt/~/dockerfile/
+FROM python:3
+RUN pip install scrapyrt==0.10
+VOLUME /scrapyrt/project
+WORKDIR /scrapyrt/project
+EXPOSE 9080
+# If a requirements.txt file is found (after mount volume to /scrapyrt/project),
+# run a pip install on it before launching scrapyrt
+CMD ( test -f requirements.txt && pip install -r requirements.txt ); \
+  scrapyrt -i 0.0.0.0 -p 9080

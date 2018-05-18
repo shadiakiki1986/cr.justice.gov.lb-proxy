@@ -1,0 +1,7 @@
+Flask
+pandas==0.22
+openpyxl
+Flask-Bootstrap==3.3.7.1
+
+# https://pypi.org/project/requests-cache/#description
+requests_cache

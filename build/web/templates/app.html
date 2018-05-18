@@ -1,0 +1,79 @@
+{# copied from https://pythonhosted.org/Flask-Bootstrap/basic-usage.html #}
+
+{% extends "bootstrap/base.html" %}
+{% block title %}cr.justice.gov.lb proxy{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+
+<!-- https://jquery.com/download/ -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+
+<div class='container'>
+    <form method="GET" action="/" id='main_form'>
+      <label>
+      Register number:
+      <input type='text'
+             name='register_number'
+             placeholder="e.g. 66942"
+             {% if register_number %}
+             value="{{register_number}}"
+             {% endif %}
+             />
+      </label>
+
+      <label>
+      Register place:
+      <input type='text' 
+             name='register_place' 
+             placeholder="e.g. Mount Lebanon" 
+             {% if register_place %}
+             value="{{register_place}}"
+             {% endif %}
+             />
+      </label>
+        
+       <label>
+           Format:
+           <select name='format'>
+                <option value="html" selected="selected">html</option>
+                <option value="json">json</option>
+                <option value="xlsx">xlsx</option>
+            </select>
+       </label>
+
+      <input type="hidden" name="use_sample" value="" />
+        
+      <input type="submit" value="Submit" class='btn btn-primary' />
+    </form>
+    <p>e.g. <a href="#" name='example_register' data-number="66942" data-place="Mount Lebanon">66942 / Mount Lebanon</a></p>
+    <p>e.g. <a href="#" name='example_register' data-number="66942" data-place="جبل لبنان"  e="">66942 / جبل لبنان</a></p>
+    <p>or <a href="#" id="use_sample">use sample</a></p>
+
+    {% if df_html is not none %}
+        {{df_html|safe}}
+    {% endif %}
+    
+    <script>
+      $(document).ready(function(){
+        $('a[name="example_register"').click(function() {
+            $('#main_form input[name="register_number"]').val($(this).data('number'));
+            $('#main_form input[name="register_place"]').val($(this).data('place'));
+            $('#main_form select[name="format"]').val('html');
+            $('#main_form').submit();
+        });
+        $('a[id="use_sample"').click(function() {
+            $('#main_form input[name="use_sample"]').val('true');
+            $('#main_form').submit();
+        });
+        $('#main_form').on('submit', function(e) {
+            //e.preventDefault();
+            $("#main_form :input[type='submit']").prop('disabled', true);
+        });
+      });
+    </script>
+</div>
+{% endblock %}
+

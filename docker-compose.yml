@@ -1,0 +1,38 @@
+version: '3.6'
+services:
+
+  # expose my spiders via API on port 9080
+  # http://scrapyrt.readthedocs.io/en/latest/api.html
+  # This image still uses python2
+  #scrapyrt:
+  #  image: scrapinghub/scrapyrt 
+  #  volumes:
+  #  - ${PWD}:/scrapyrt/project
+
+  scrapyrt:
+    build:
+      context: ./build/scrapyrt
+      dockerfile: Dockerfile.scrapyrt
+    volumes:
+    - ${PWD}/scrapy-cr.justice.gov.lb:/scrapyrt/project
+
+  # useful for debugging
+  # apk --update add curl
+  # curl http://scrapyrt:9080/crawl.json \
+  #   -d '{"request":{"url": "http://example.com", "meta": {"df_in": [{"register_number": "66942", "register_place": "Mount Lebanon"}]}}, "spider_name": "cr_justice_gov_lb_single"}'
+  #terminal:
+  #  image: alpine
+
+  # sample app from
+  # https://docs.docker.com/engine/swarm/stack-deploy/#test-the-app-with-compose
+  web:
+    build:
+      context: ./build/web
+      dockerfile: Dockerfile.web
+    ports:
+    - "3000:8000"
+    environment:
+    - SCRAPYRT=http://scrapyrt:9080
+    - FLASK_ENV=development # FIXME only during dev
+    volumes:
+    - ./build/web:/code # FIXME only during dev

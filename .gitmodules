@@ -1,0 +1,3 @@
+[submodule "scrapy-cr.justice.gov.lb"]
+	path = scrapy-cr.justice.gov.lb
+	url = https://github.com/shadiakiki1986/scrapy-cr.justice.gov.lb
