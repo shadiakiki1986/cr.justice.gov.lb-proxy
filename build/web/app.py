@@ -1,4 +1,4 @@
-from flask import Flask, flash, jsonify, request, send_file, render_template, redirect
+from flask import Flask, flash, jsonify, request, send_file, render_template, redirect, send_from_directory
 import os
 import requests
 import requests_cache
@@ -185,3 +185,9 @@ def hello():
 
     return render_template('app.html', df_html=df_html, register_number=register_number, register_place=register_place)
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@app.route('/example_file', methods=['GET'])
+def example_file():
+    return send_from_directory(BASE_DIR, 'df_in_sample.xlsx')
