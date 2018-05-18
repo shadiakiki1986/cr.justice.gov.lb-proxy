@@ -1,0 +1,11 @@
+version: '3.6'
+services:
+
+  web:
+    environment:
+    - FLASK_ENV=development # FIXME only during dev
+    - GOOGLE_APPLICATION_CREDENTIALS=/usr/share/gcp_key.json # set here, and mount below
+    volumes:
+    - ./build/web:/code # FIXME only during dev
+    - /home/ubuntu/path/to/gcp_key.json:/usr/share/gcp_key.json:ro # FIXME how to deal with this if publishing to docker hub?
+

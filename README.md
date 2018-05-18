@@ -3,7 +3,12 @@ Flask app wrapping [scrapy-cr.justice.gov.lb](https://github.com/shadiakiki1986/
 
 ## Usage
 
-Set `GOOGLE_APPLICATION_KEY` in `docker-compose.yml` to get arabic-english translation of names
+For defaults, just `docker-compose up -d` (regular docker-fu)
+
+To get arabic-english translation of names
+- Copy `docker-compose.override.yml.dist` to `docker-compose.override.yml`
+- Set `GOOGLE_APPLICATION_KEY` in `docker-compose.override.yml`
+
 
 ## Changelog
 

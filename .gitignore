@@ -1,3 +1,4 @@
 .*swp
 build/web/scrapyrt_cache.sqlite
 build/web/__pycache__/
+docker-compose.override.yml

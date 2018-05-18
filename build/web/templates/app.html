@@ -13,14 +13,16 @@
 
 <div class='container'>
     
-    <h2></h2>
-    
+    {% if df_html is none %}
     <div class="jumbotron">
       <h1 class="display-4">Proxy for <a href="http://cr.justice.gov.lb">cr.justice.gov.lb</a></h1>
       <p class="lead">Enter single/multiple register number/place pairs in one shot.</p>
       <hr class="my-4">
       <p>Read results in this page or download xlsx file.</p>
     </div>
+    {% else %}
+    <a href="/">cr.justice.gov.lb proxy</a>
+    {% endif %}
     
     <div class='row'>
         <div class='col-md-9'>
