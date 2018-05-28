@@ -12,7 +12,7 @@ from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
 
-BASE_CRJUSTICE = "http://cr.justice.gov.lb/search"
+# BASE_CRJUSTICE = "http://cr.justice.gov.lb/search"
 DT_FF = "%Y%m%d_%H%M%S_UTC"
 
 app = Flask(__name__)
@@ -30,6 +30,10 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     
+
+def make_anchor(x):
+  return "<a href='%s'target='_blank'>Details</a>"%(x) # BASE_CRJUSTICE, 
+
     
 # GET vs POST functionality
 # e.g. https://realpython.com/caching-external-api-requests/
@@ -160,7 +164,9 @@ def hello():
     pipeline.df_out = df_out.copy()
     pipeline.df_in = df_in.copy() # FIXME does this get the most recent "status" field
     pipeline.close_spider(None)
+
     df_merged = pipeline.merge_in_out()
+    pipeline.df_out.sort_values(['df_idx', 'relationship', 'obligor_alien'], inplace=True)
 
     if df_merged.shape[0]==0:
       # return render_template('app.html', df_html='No results found', register_number=register_number, register_place=register_place)
@@ -169,14 +175,20 @@ def hello():
 
 
     # postprocess details_url
-    df_merged['details_url'] = df_merged['details_url'].apply(
-      lambda x: "<a href='%s/%s'target='_blank'>Details</a>"%(BASE_CRJUSTICE, x)
-    )
+    del df_merged['index']
+    del df_merged['df_idx']
+    df_merged['details_url'] = df_merged['details_url'].apply(make_anchor)
+    pipeline.df_in['details_url'] = pipeline.df_in['details_url'].apply(make_anchor)
 
     if requested_format=='xlsx':
       output = BytesIO()
       writer = pd.ExcelWriter(output)
-      df_merged.to_excel(writer, sheet_name="main")
+      # df_merged.to_excel(writer, sheet_name="main")
+      pipeline.df_in.to_excel(writer, sheet_name="input")
+      for idx, row in pipeline.df_in.iterrows():
+        subout = pipeline.df_out[pipeline.df_out['df_idx']==idx]
+        subout.to_excel(writer, sheet_name="%s %s"%('out for', idx))
+
       writer.save()
       output.seek(0)
       fn = 'crjusticegovlb_%s.xlsx'
@@ -187,14 +199,20 @@ def hello():
 
  
     # escape=False for displaying html anchor in td
-    df_html = df_merged.to_html(classes='table', escape=False, index=False)
-
+    # df_html = df_merged.to_html(classes='table', escape=False, index=False)
+    df_html = []
+    df_html.append('<h5>Input</h5>')
+    df_html.append(pipeline.df_in.set_index('df_idx').to_html(classes='table', escape=False, index=True))
+    df_html.append('<br>')
+    df_html.append('<h5>Output</h5>')
+    df_html.append(pipeline.df_out.to_html(classes='table', escape=False, index=False))
+    df_html = "".join(df_html)
 
     return render_template('app.html', df_html=df_html, register_number=register_number, register_place=register_place)
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-@app.route('/example_file', methods=['GET'])
+@app.route('/example_file.xlsx', methods=['GET'])
 def example_file():
     return send_from_directory(BASE_DIR, 'df_in_sample.xlsx')
