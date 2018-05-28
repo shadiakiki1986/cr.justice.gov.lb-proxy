@@ -165,19 +165,20 @@ def hello():
     pipeline.df_in = df_in.copy() # FIXME does this get the most recent "status" field
     pipeline.close_spider(None)
 
-    df_merged = pipeline.merge_in_out()
-    pipeline.df_out.sort_values(['df_idx', 'relationship', 'obligor_alien'], inplace=True)
+    # df_merged = pipeline.merge_in_out()
+    if pipeline.df_out.shape[0]>0:
+      pipeline.df_out.sort_values(['df_idx', 'relationship', 'obligor_alien'], inplace=True)
 
-    if df_merged.shape[0]==0:
-      # return render_template('app.html', df_html='No results found', register_number=register_number, register_place=register_place)
-      flash('No results found')
-      return redirect(request.url)
+    #if df_merged.shape[0]==0:
+    #  # return render_template('app.html', df_html='No results found', register_number=register_number, register_place=register_place)
+    #  flash('No results found')
+    #  return redirect(request.url)
 
 
     # postprocess details_url
-    del df_merged['index']
-    del df_merged['df_idx']
-    df_merged['details_url'] = df_merged['details_url'].apply(make_anchor)
+    #del df_merged['index']
+    #del df_merged['df_idx']
+    #df_merged['details_url'] = df_merged['details_url'].apply(make_anchor)
     pipeline.df_in['details_url'] = pipeline.df_in['details_url'].apply(make_anchor)
 
     if requested_format=='xlsx':
@@ -216,3 +217,4 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 @app.route('/example_file.xlsx', methods=['GET'])
 def example_file():
     return send_from_directory(BASE_DIR, 'df_in_sample.xlsx')
+
