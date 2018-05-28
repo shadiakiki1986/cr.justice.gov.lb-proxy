@@ -144,33 +144,39 @@ def hello():
         response = requests.post('%s/crawl.json'%SCRAPYRT_URL, data=json.dumps(payload))
 
 
-
     if requested_format=='json':
       return jsonify(response.json())
 
-    df_out = pd.DataFrame(response.json()['items'])
+    response2 = response.json()['items']
+
+    # split items into df_in and df_out
+    df_in  = [x['entry'] for x in response2 if x['type']=='df_in' ]
+    df_out = [x['entry'] for x in response2 if x['type']=='df_out']
+    df_in  = pd.DataFrame(df_in)
+    df_out = pd.DataFrame(df_out)
 
     # send to spider pipeline .. scrapyrt doesnt do this
     pipeline = ScrapyCrJusticeGovLbPipeline()
-    pipeline.df = df_out.copy()
+    pipeline.df_out = df_out.copy()
+    pipeline.df_in = df_in.copy() # FIXME does this get the most recent "status" field
     pipeline.close_spider(None)
-    df_out = pipeline.df
+    df_merged = pipeline.merge_in_out()
 
-    if df_out.shape[0]==0:
+    if df_merged.shape[0]==0:
       # return render_template('app.html', df_html='No results found', register_number=register_number, register_place=register_place)
       flash('No results found')
       return redirect(request.url)
 
 
     # postprocess details_url
-    df_out['details_url'] = df_out['details_url'].apply(
+    df_merged['details_url'] = df_merged['details_url'].apply(
       lambda x: "<a href='%s/%s'target='_blank'>Details</a>"%(BASE_CRJUSTICE, x)
     )
 
     if requested_format=='xlsx':
       output = BytesIO()
       writer = pd.ExcelWriter(output)
-      df_out.to_excel(writer, sheet_name="main")
+      df_merged.to_excel(writer, sheet_name="main")
       writer.save()
       output.seek(0)
       fn = 'crjusticegovlb_%s.xlsx'
@@ -181,7 +187,7 @@ def hello():
 
  
     # escape=False for displaying html anchor in td
-    df_html = df_out.to_html(classes='table', escape=False, index=False)
+    df_html = df_merged.to_html(classes='table', escape=False, index=False)
 
 
     return render_template('app.html', df_html=df_html, register_number=register_number, register_place=register_place)

@@ -19,8 +19,14 @@ To get arabic-english translation of names
 ## Dev notes
 
 ```
-docker-compose build
+# first git checkout
 git submodule init
+
+# or for later submodule updates
+git submodule foreach git pull origin master
+
+# build
+docker-compose build
 ```
 
 ## Dev notes 2
