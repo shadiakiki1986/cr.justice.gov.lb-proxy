@@ -8,4 +8,23 @@ services:
     volumes:
     - ./build/web:/code # FIXME only during dev
     - /home/ubuntu/path/to/gcp_key.json:/usr/share/gcp_key.json:ro # FIXME how to deal with this if publishing to docker hub?
+    # For http access just expose the port 8000
+    # For https access, use the "proxy" service below
+    ports:
+    - "3000:8000"
+
+  # for handling https
+  # proxy:
+  #   image: nginx:alpine
+  #   volumes:
+  #   - ${PWD}/build/nginx/nginx.conf:/etc/nginx/conf.d/crjusticegovlb-proxy.conf:ro
+  #   # using let's encrypt from the server
+  #   - /etc/letsencrypt/:/etc/letsnecrypt/:ro
+  #   - /etc/letsencrypt/live/example.com/fullchain.pem:/etc/letsencrypt/fullchain.pem:ro
+  #   - /etc/letsencrypt/live/example.com/privkey.pem:/etc/letsencrypt/privkey.pem:ro
+  #   - /etc/letsencrypt/options-ssl-nginx.conf:/etc/letsencrypt/options-ssl-nginx.conf:ro
+  #   - /etc/letsencrypt/ssl-dhparams.pem:/etc/letsencrypt/ssl-dhparams.pem:ro
+
+  #   ports:
+  #   - "3000:443"
 

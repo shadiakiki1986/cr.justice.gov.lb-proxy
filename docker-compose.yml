@@ -29,8 +29,6 @@ services:
     build:
       context: ./build/web
       dockerfile: Dockerfile.web
-    ports:
-    - "3000:8000"
     environment:
     - SCRAPYRT=http://scrapyrt:9080
 
