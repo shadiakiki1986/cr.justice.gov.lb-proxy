@@ -8,6 +8,7 @@ import pandas as pd
 import datetime as dt
 from flask_bootstrap import Bootstrap
 from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
+import time
 
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
@@ -77,7 +78,8 @@ def hello():
         requested_format = request.args.get('format', default="html", type=str)
 
         if use_sample:
-          url_sample = 'https://s3-us-west-2.amazonaws.com/keras-models-factory/scrapy-crjusticegovlb-scrapyrt-sample.json'
+          # url_sample = 'https://s3-us-west-2.amazonaws.com/keras-models-factory/scrapy-crjusticegovlb-scrapyrt-sample.json'
+          url_sample = 'https://raw.githubusercontent.com/shadiakiki1986/scrapy-cr.justice.gov.lb/master/scrapyrt-sample.json?ts=%s'%(time.time())
           register_number = 66942
           register_place = "Mount Lebanon"
           response = requests.get(url_sample)
@@ -167,7 +169,7 @@ def hello():
 
     # df_merged = pipeline.merge_in_out()
     if pipeline.df_out.shape[0]>0:
-      pipeline.df_out.sort_values(['df_idx', 'relationship', 'obligor_alien'], inplace=True)
+      pipeline.df_out.sort_values(['df_idx', 'Position', 'Name (Arabic)'], inplace=True)
 
     #if df_merged.shape[0]==0:
     #  # return render_template('app.html', df_html='No results found', register_number=register_number, register_place=register_place)

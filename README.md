@@ -29,11 +29,15 @@ For more features, copy `docker-compose.override.yml.dist` to `docker-compose.ov
 git submodule init
 git submodule update
 
+# docker-compose-fu: build and up
+docker-compose build
+docker-compose up -d
+
 # or for later submodule updates
 git submodule foreach git pull origin master
 
-# build
-docker-compose build
+# restart the scrapyrt to load the updated code (scrapyrt doesn't auto-reload like the `FLASK_ENV=development` feature)
+docker-compose restart scrapyrt
 ```
 
 ## Dev notes 2
