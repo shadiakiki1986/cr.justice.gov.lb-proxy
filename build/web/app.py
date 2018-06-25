@@ -59,8 +59,6 @@ def hello():
     SCRAPYRT_URL = os.getenv("SCRAPYRT", None)
     if SCRAPYRT_URL is None:
       return "Configure env var SCRAPYRT, e.g. http://localhost:3000"
-
-    # return 'Hello World!'
     
     # defaults
     uploaded_file = None
@@ -70,7 +68,7 @@ def hello():
     requested_format = "html"
     
     if request.method == 'GET':
-        # get GET parameters
+        # get GET parameters (used when user inputs a single register number/place)
         # http://docs.python-requests.org/en/master/
         use_sample = request.args.get('use_sample', default=False, type=bool)
         register_number = request.args.get('register_number', default=None, type=str)
@@ -98,7 +96,7 @@ def hello():
           #return json.loads(response.content.decode())
     
     else:
-        # get POST parameters
+        # get POST parameters (used when a user uploads an excel of company register numbers and places)
         # https://realpython.com/caching-external-api-requests/
         # use_sample = request.form.get('use_sample', default=False, type=bool)
         # register_number = request.form.get('register_number', default=None, type=str)
@@ -199,6 +197,22 @@ def hello():
       fn = fn%dt_suffix
       # bla
       return send_file(output, attachment_filename=fn, as_attachment=True)
+
+
+    # raw html in zip archive
+    # copied from scrapy-cr.justice.gov.lb RawHtmlPipeline
+    if requested_format=='zip':
+      raw_html = {x['register_number']: x['html'] for x in response2 if x['type']=='raw_html'}
+
+      # save all raw html into zip
+      output = BytesIO()
+      with ZipFile(output, 'a') as zf:
+        for reg_num, html_i in spider.raw_html.items():
+          zf.writestr("%s.html"%reg_num, html_i.body)
+
+      output.seek(0)
+      return send_file(output, attachment_filename=fnz, as_attachment=True)
+
 
  
     # escape=False for displaying html anchor in td
