@@ -20,6 +20,9 @@ For more features, copy `docker-compose.override.yml.dist` to `docker-compose.ov
 
 0.2 (2018-06-25?)
 - add "zip" format, which is a zip archive of raw html of each company
+- add dataframe of "all output" in a single sheet for format=xlsx
+- drop index column from format=xlsx
+
 
 0.1 (2018-05-17)
 - can either type in register number/place or upload xlsx file (examples in-page)

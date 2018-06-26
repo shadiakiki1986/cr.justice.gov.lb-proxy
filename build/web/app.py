@@ -191,10 +191,12 @@ def hello():
       output = BytesIO()
       writer = pd.ExcelWriter(output)
       # df_merged.to_excel(writer, sheet_name="main")
-      pipeline.df_in.to_excel(writer, sheet_name="input")
+      pipeline.df_in.to_excel(writer, sheet_name="input", index=False) # sheet with input (company register number/place)
+      pipeline.df_out.to_excel(writer, sheet_name="output", index=False) # sheet with all output (shareholders, proxy holders, etc for all companies)
+      # split each set of output per company
       for idx, row in pipeline.df_in.iterrows():
         subout = pipeline.df_out[pipeline.df_out['df_idx']==idx]
-        subout.to_excel(writer, sheet_name="%s %s"%('out for', idx))
+        subout.to_excel(writer, sheet_name="%s %s"%('out for', idx), index=False)
 
       writer.save()
       output.seek(0)
