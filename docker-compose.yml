@@ -31,4 +31,3 @@ services:
       dockerfile: Dockerfile.web
     environment:
     - SCRAPYRT=http://scrapyrt:9080
-

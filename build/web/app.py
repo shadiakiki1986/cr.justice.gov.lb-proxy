@@ -9,6 +9,7 @@ import datetime as dt
 from flask_bootstrap import Bootstrap
 from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
 import time
+from zipfile import ZipFile
 
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
@@ -151,6 +152,11 @@ def hello():
     if requested_format=='json':
       return jsonify(response.json())
 
+    # in case of errors, still return json
+    if 'errors' in response.json():
+      return jsonify(response.json())
+
+    # move to formatting returned items
     response2 = response.json()['items']
 
     # split items into df_in and df_out
@@ -207,8 +213,12 @@ def hello():
       # save all raw html into zip
       output = BytesIO()
       with ZipFile(output, 'a') as zf:
-        for reg_num, html_i in spider.raw_html.items():
-          zf.writestr("%s.html"%reg_num, html_i.body)
+        for reg_num, html_i in raw_html.items():
+          zf.writestr("%s.html"%reg_num, html_i)
+
+      fnz = 'crjusticegovlb_%s.zip'
+      dt_suffix = dt.datetime.strftime(dt.datetime.utcnow(), DT_FF)
+      fnz = fnz%dt_suffix
 
       output.seek(0)
       return send_file(output, attachment_filename=fnz, as_attachment=True)
