@@ -22,6 +22,7 @@ For more features, copy `docker-compose.override.yml.dist` to `docker-compose.ov
 - merge business name en/ar into `df_out`
 - more user-friendly dropdown for format
 - add link to wiki for instructions
+- use company name (arabic) for sheet names
 
 0.2 (2018-06-25)
 - add "zip" format, which is a zip archive of raw html of each company

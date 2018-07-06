@@ -10,6 +10,7 @@ from flask_bootstrap import Bootstrap
 from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
 import time
 from zipfile import ZipFile
+import re
 
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
@@ -203,7 +204,10 @@ def hello():
       # split each set of output per company
       for idx, row in pipeline.df_in.iterrows():
         subout = pipeline.df_out[pipeline.df_out['df_idx']==idx]
-        subout.to_excel(writer, sheet_name="%s %s"%('out for', idx), index=False)
+        # sheet_name = "%s %s"%('out for', idx)
+        sheet_name = row['business_name_ar'][:15]
+        sheet_name = re.sub(r'[^\w\s]', '', sheet_name, re.UNICODE)
+        subout.to_excel(writer, sheet_name=sheet_name, index=False)
 
       writer.save()
       output.seek(0)
