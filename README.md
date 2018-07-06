@@ -18,6 +18,9 @@ For more features, copy `docker-compose.override.yml.dist` to `docker-compose.ov
 
 ## Changelog
 
+0.4 (2018-07-??)
+- ...
+
 0.3 (2018-07-06)
 - merge business name en/ar into `df_out`
 - more user-friendly dropdown for format
