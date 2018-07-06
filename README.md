@@ -18,7 +18,10 @@ For more features, copy `docker-compose.override.yml.dist` to `docker-compose.ov
 
 ## Changelog
 
-0.2 (2018-06-25?)
+0.3 (2018-07-06)
+- merge business name en/ar into `df_out`
+
+0.2 (2018-06-25)
 - add "zip" format, which is a zip archive of raw html of each company
 - add dataframe of "all output" in a single sheet for format=xlsx
 - drop index column from format=xlsx

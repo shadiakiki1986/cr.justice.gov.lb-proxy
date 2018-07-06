@@ -14,6 +14,7 @@ services:
       context: ./build/scrapyrt
       dockerfile: Dockerfile.scrapyrt
     volumes:
+    # 2018-07-06 ${PWD} will not work if not in the repo root
     - ${PWD}/scrapy-cr.justice.gov.lb:/scrapyrt/project
 
   # useful for debugging

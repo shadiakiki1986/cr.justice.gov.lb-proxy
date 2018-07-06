@@ -165,6 +165,13 @@ def hello():
     df_in  = pd.DataFrame(df_in)
     df_out = pd.DataFrame(df_out)
 
+    # append name/number from df_in to df_out via merge on df_idx
+    df_out = df_out.merge(
+        df_in[['df_idx', 'register_number', 'register_place', 'business_name_ar', 'business_name_en']],
+        on='df_idx',
+        how='left'
+    )
+
     # send to spider pipeline .. scrapyrt doesnt do this
     pipeline = ScrapyCrJusticeGovLbPipeline()
     pipeline.df_out = df_out.copy()
