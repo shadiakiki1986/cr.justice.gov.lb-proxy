@@ -19,7 +19,7 @@ For more features, copy `docker-compose.override.yml.dist` to `docker-compose.ov
 ## Changelog
 
 0.4 (2018-07-??)
-- ...
+- change file names in zip of html pages to be names instead of numbers
 
 0.3 (2018-07-06)
 - merge business name en/ar into `df_out`

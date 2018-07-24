@@ -11,6 +11,7 @@ from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
 import time
 from zipfile import ZipFile
 import re
+from urllib.parse import urlencode
 
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
@@ -221,13 +222,14 @@ def hello():
     # raw html in zip archive
     # copied from scrapy-cr.justice.gov.lb RawHtmlPipeline
     if requested_format=='zip':
-      raw_html = {x['register_number']: x['html'] for x in response2 if x['type']=='raw_html'}
+      name_encoded = urlencode(x['business_name_ar'])
+      raw_html = {name_encoded: x['html'] for x in response2 if x['type']=='raw_html'}
 
       # save all raw html into zip
       output = BytesIO()
       with ZipFile(output, 'a') as zf:
-        for reg_num, html_i in raw_html.items():
-          zf.writestr("%s.html"%reg_num, html_i)
+        for html_fn, html_i in raw_html.items():
+          zf.writestr("%s.html"%html_fn, html_i)
 
       fnz = 'crjusticegovlb_%s.zip'
       dt_suffix = dt.datetime.strftime(dt.datetime.utcnow(), DT_FF)
