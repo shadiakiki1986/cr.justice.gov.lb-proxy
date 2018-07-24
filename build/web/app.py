@@ -11,7 +11,6 @@ from scrapy_cr_justice_gov_lb.pipelines import ScrapyCrJusticeGovLbPipeline
 import time
 from zipfile import ZipFile
 import re
-from urllib.parse import urlencode
 
 
 requests_cache.install_cache(cache_name='scrapyrt_cache', backend='sqlite', expire_after=1*60*60) # expires in 1 hour
@@ -37,6 +36,14 @@ def allowed_file(filename):
 
 def make_anchor(x):
   return "<a href='%s'target='_blank'>Details</a>"%(x) # BASE_CRJUSTICE, 
+
+
+def make_valid_filename(name):
+  """
+  https://stackoverflow.com/a/295152/4126114
+  """
+  mylist = [letter if letter.isalnum() else ' ' for letter in name]
+  return "".join(mylist)
 
     
 # GET vs POST functionality
@@ -222,8 +229,7 @@ def hello():
     # raw html in zip archive
     # copied from scrapy-cr.justice.gov.lb RawHtmlPipeline
     if requested_format=='zip':
-      name_encoded = urlencode(x['business_name_ar'])
-      raw_html = {name_encoded: x['html'] for x in response2 if x['type']=='raw_html'}
+      raw_html = {make_valid_filename(x['business_name_ar']): x['html'] for x in response2 if x['type']=='raw_html'}
 
       # save all raw html into zip
       output = BytesIO()
